@@ -7,7 +7,7 @@ $img->convert();
 $img->square();
 $img->resize(256, 256);
 $img->show();
-$img->save("squared_resized.png");
+$img->save("squared_resized.jpg");
 $img->destroy();
 
 // print_r($img);

@@ -11,6 +11,6 @@ $img->convert();            // to jpeg
 $img->square();             // horizontal|vertical -> square
 $img->resize(256, 256);
 $img->show();               // output to browser
-$img->save("squared_resized.png");
+$img->save("squared_resized.jpg");
 $img->destroy();
 ```
