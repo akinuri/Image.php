@@ -13,4 +13,4 @@ $img->resize(256, 256);
 $img->show();
 $img->save("squared_resized.png");
 $img->destroy();
-```php
+```
