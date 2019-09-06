@@ -10,7 +10,7 @@ $img = new Image("win_xp_transparent.png");
 $img->convert();            // to jpeg
 $img->square();             // horizontal|vertical -> square
 $img->resize(256, 256);
-$img->show();               // send to client
+$img->show();               // output to browser
 $img->save("squared_resized.png");
 $img->destroy();
 ```
