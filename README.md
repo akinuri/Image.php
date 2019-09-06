@@ -1,2 +1,2 @@
 # Image.php
- Image modification class.
+Image modification class.
