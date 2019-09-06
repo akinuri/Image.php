@@ -1,5 +1,10 @@
 <?php
 
+function num_in_range($int = null, $min = null, $max = null) {
+    if (in_array(null, [$int, $min, $max], true)) return false;
+    return $min <= $int && $int <= $max;
+}
+
 class Image {
     
     public $resource = null;
@@ -107,8 +112,8 @@ class Image {
         
         if ($x === null || $y === null || !$width || !$height) return false;
         
-        if (0 <= $x && $x <= $this->width) return false;
-        if (0 <= $y && $y <= $this->height) return false;
+        if (!num_in_range($x, 0, $this->width)) return false;
+        if (!num_in_range($y, 0, $this->height)) return false;
         
         $right_offset  = $this->width  - ($x + $width);
         $bottom_offset = $this->height - ($y + $height);
