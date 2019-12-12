@@ -1,7 +1,7 @@
 # Image.php
 A class for image manipulation.
 
-Written for small tasks after a file upload.
+Written for small tasks (e.g. modify image after upload).
 
 ```php
 include "Image.php";
