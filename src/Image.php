@@ -2,8 +2,12 @@
 
 /**
  * A class to manipulate images.
+ * 
  * Created for thumbnail generation.
- * https://www.php.net/manual/en/book.image.php
+ * 
+ * @author	https://github.com/akinuri
+ * @link	https://github.com/akinuri/Image.php
+ * @link    https://www.php.net/manual/en/book.image.php
  */
 class Image {
     
