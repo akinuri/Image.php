@@ -92,8 +92,8 @@ class Image {
     
     
     /**
-     * Converts an image between different formarts.
-     * Currently converts to JPG only.
+     * Converts an image between different formats.
+     * Currently converts to JPEG only.
      */
     public function convert($to = "jpeg") {
         
