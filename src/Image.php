@@ -1,25 +1,63 @@
 <?php
 
-class ImageDependencies {
-    public static function num_in_range(float $int, float $min, float $max) {
-        return $min <= $int && $int <= $max;
-    }
-}
-
+/**
+ * A class to manipulate images.
+ * Created for thumbnail generation.
+ * https://www.php.net/manual/en/book.image.php
+ */
 class Image {
     
+    
+    /**
+     * A handle to the image resource.
+     */
     public $resource = null;
     
-    public $width    = null;
-    public $height   = null;
+    
+    /**
+     * Image width.
+     */
+    public $width = null;
+    
+    
+    /**
+     * Image height.
+     */
+    public $height = null;
+    
+    
+    /**
+     * Image channel count (R, G, B).
+     */
     public $channels = null;
-    public $bits     = null;
-    public $mime     = null;
-    public $ext      = null;
-    public $size     = null;
     
     
-    function __construct($file_path = null) {
+    /**
+     * Image bits.
+     */
+    public $bits = null;
+    
+    
+    /**
+     * Image MIME type.
+     */
+    public $mime = null;
+    
+    
+    /**
+     * Image file extension.
+     */
+    public $ext = null;
+    
+    
+    /**
+     * Image file size.
+     */
+    public $size = null;
+    
+    
+    
+    function __construct(string $file_path = null) {
         if ($file_path) {
             $this->read($file_path);
         }
@@ -27,6 +65,9 @@ class Image {
     
     
     
+    /**
+     * Loads an image from a path to the memory.
+     */
     public function read(string $file_path) {
         
         if (!file_exists($file_path)) return false;
@@ -50,6 +91,10 @@ class Image {
     
     
     
+    /**
+     * Converts an image between different formarts.
+     * Currently converts to JPG only.
+     */
     public function convert($to = "jpeg") {
         
         if (!$this->resource) return false;
@@ -70,6 +115,45 @@ class Image {
     
     
     
+    /**
+     * Crops an image.
+     */
+    public function crop(int $x = null, int $y = null, int $width = null, int $height = null) {
+        
+        if (!$this->resource) return false;
+        
+        if ($x === null || $y === null || !$width || !$height) return false;
+        
+        if ( !(0 <= $x && $x <= $this->width) ) return false;
+        if ( !(0 <= $y && $y <= $this->height) ) return false;
+        
+        $right_offset  = $this->width  - ($x + $width);
+        $bottom_offset = $this->height - ($y + $height);
+        if ($right_offset < 0)  $width  += $right_offset;
+        if ($bottom_offset < 0) $height += $bottom_offset;
+        
+        $cropped = imagecrop($this->resource, [
+            "x"      => $x,
+            "y"      => $y,
+            "width"  => $width,
+            "height" => $height,
+        ]);
+        
+        if (!$cropped) return false;
+        
+        $this->resource = $cropped;
+        $this->width    = $width;
+        $this->height   = $height;
+        $this->size     = null;
+        
+        return true;
+    }
+    
+    
+    
+    /**
+     * Crops an image into a square shape.
+     */
     public function square() {
         
         $short_side = null;
@@ -108,39 +192,9 @@ class Image {
     
     
     
-    public function crop($x = null, $y = null, $width = null, $height = null) {
-        
-        if (!$this->resource) return false;
-        
-        if ($x === null || $y === null || !$width || !$height) return false;
-        
-        if (!ImageDependencies::num_in_range($x, 0, $this->width)) return false;
-        if (!ImageDependencies::num_in_range($y, 0, $this->height)) return false;
-        
-        $right_offset  = $this->width  - ($x + $width);
-        $bottom_offset = $this->height - ($y + $height);
-        if ($right_offset < 0)  $width  += $right_offset;
-        if ($bottom_offset < 0) $height += $bottom_offset;
-        
-        $cropped = imagecrop($this->resource, [
-            "x"      => $x,
-            "y"      => $y,
-            "width"  => $width,
-            "height" => $height,
-        ]);
-        
-        if (!$cropped) return false;
-        
-        $this->resource = $cropped;
-        $this->width    = $width;
-        $this->height   = $height;
-        $this->size     = null;
-        
-        return true;
-    }
-    
-    
-    
+    /**
+     * Resizes an image to specificied dimensions.
+     */
     public function resize(int $width, int $height) {
         
         if (!$this->resource) return false;
@@ -159,6 +213,9 @@ class Image {
     
     
     
+    /**
+     * Resizes an image so that it fits in an area.
+     */
     public function fit(int $box_width, int $box_height) {
         
         $new_width  = 0;
@@ -177,6 +234,9 @@ class Image {
     
     
     
+    /**
+     * Resizes an image so that it fills in an area.
+     */
     public function fill(int $box_width, int $box_height) {
         
         $new_width  = 0;
@@ -212,6 +272,9 @@ class Image {
     
     
     
+    /**
+     * Outputs the image to browser.
+     */
     public function show() {
         if (!$this->resource) return false;
         header("Content-Type: " . $this->mime);
@@ -228,7 +291,10 @@ class Image {
     
     
     
-    public function save(string $file_path, $quality = -1) {
+    /**
+     * Creates an image at the specified location.
+     */
+    public function save(string $file_path, int $quality = -1) {
         
         if (!$this->resource) return false;
         
@@ -250,6 +316,9 @@ class Image {
     
     
     
+    /**
+     * Destroys image, resets handle and all other properties.
+     */
     public function destroy() {
         if ($this->resource) {
             imagedestroy($this->resource);
