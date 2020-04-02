@@ -1,7 +1,7 @@
 <?php
 
 /**
- * A class to manipulate images.
+ * Image Manipulation Class
  * 
  * Created for thumbnail generation.
  * 
